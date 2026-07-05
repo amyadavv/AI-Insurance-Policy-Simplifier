@@ -3,10 +3,16 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HiCloudUpload, HiDocumentText, HiX } from 'react-icons/hi';
 import usePolicy from '../hooks/usePolicy';
+import useAuth from '../hooks/useAuth';
 
 const UploadPage = () => {
+  const { user } = useAuth();
   const [file, setFile] = useState(null);
   const [tags, setTags] = useState('');
+  const [clientName, setClientName] = useState('');
+  const [clientEmail, setClientEmail] = useState('');
+  const [isWhiteLabeled, setIsWhiteLabeled] = useState(true);
+  
   const [dragActive, setDragActive] = useState(false);
   const { uploadPolicy, uploadProgress } = usePolicy();
   const navigate = useNavigate();
@@ -31,7 +37,7 @@ const UploadPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!file) return;
-    const result = await uploadPolicy(file, tags);
+    const result = await uploadPolicy(file, tags, clientName, clientEmail, isWhiteLabeled);
     if (result) navigate(`/policy/${result._id}`);
   };
 
@@ -102,6 +108,49 @@ const UploadPage = () => {
             placeholder="health, family, 2025 (comma separated)"
           />
         </div>
+
+        {/* Agent Client Branding Options */}
+        {user?.isAgent && (
+          <div className="border rounded-2xl p-5 space-y-4 shadow-sm" style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}>
+            <h3 className="text-sm font-bold text-primary-theme">Client Portal Options (White-Label)</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold mb-1.5 text-muted-theme">Client Name (optional)</label>
+                <input
+                  type="text"
+                  value={clientName}
+                  onChange={(e) => setClientName(e.target.value)}
+                  className="w-full border rounded-xl px-3 py-2 text-xs focus:outline-none text-primary-theme"
+                  style={{ backgroundColor: 'var(--bg-input)', borderColor: 'var(--border-input)' }}
+                  placeholder="John Smith"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold mb-1.5 text-muted-theme">Client Email (optional)</label>
+                <input
+                  type="email"
+                  value={clientEmail}
+                  onChange={(e) => setClientEmail(e.target.value)}
+                  className="w-full border rounded-xl px-3 py-2 text-xs focus:outline-none text-primary-theme"
+                  style={{ backgroundColor: 'var(--bg-input)', borderColor: 'var(--border-input)' }}
+                  placeholder="john.smith@example.com"
+                />
+              </div>
+            </div>
+            <div className="flex items-center space-x-2 pt-1">
+              <input
+                id="is-whitelabel-check"
+                type="checkbox"
+                checked={isWhiteLabeled}
+                onChange={(e) => setIsWhiteLabeled(e.target.checked)}
+                className="w-4 h-4 text-primary-600 border rounded focus:ring-primary-500 cursor-pointer"
+              />
+              <label htmlFor="is-whitelabel-check" className="text-xs text-muted-theme cursor-pointer select-none">
+                Enable white-label summary sharing link for this client
+              </label>
+            </div>
+          </div>
+        )}
 
         {/* Progress */}
         {uploadProgress.isUploading && (

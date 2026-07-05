@@ -105,6 +105,18 @@ const policySchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    clientName: {
+      type: String,
+      default: '',
+    },
+    clientEmail: {
+      type: String,
+      default: '',
+    },
+    isWhiteLabeled: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

@@ -18,13 +18,16 @@ const usePolicy = () => {
   const [stats, setStats] = useRecoilState(dashboardStatsAtom);
 
   // Upload a new policy
-  const uploadPolicy = async (file, tags = '') => {
+  const uploadPolicy = async (file, tags = '', clientName = '', clientEmail = '', isWhiteLabeled = false) => {
     setUploadProgress({ isUploading: true, step: 'uploading', progress: 10 });
 
     try {
       const formData = new FormData();
       formData.append('document', file);
       if (tags) formData.append('tags', tags);
+      if (clientName) formData.append('clientName', clientName);
+      if (clientEmail) formData.append('clientEmail', clientEmail);
+      formData.append('isWhiteLabeled', isWhiteLabeled);
 
       setUploadProgress({ isUploading: true, step: 'uploading', progress: 30 });
 

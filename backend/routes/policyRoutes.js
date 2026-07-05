@@ -9,11 +9,15 @@ const {
   toggleBookmark,
   reSimplifyPolicy,
   getDashboardStats,
+  getSharedPolicyById,
 } = require('../controllers/policyController');
 const { protect } = require('../middleware/authMiddleware');
 const upload = require('../middleware/uploadMiddleware');
 
-// All routes require authentication
+// Public routes (accessible without login)
+router.get('/shared/:id', getSharedPolicyById);
+
+// All routes after this require authentication
 router.use(protect);
 
 // Dashboard stats (must be before /:id to avoid conflict)

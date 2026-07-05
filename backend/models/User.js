@@ -40,6 +40,17 @@ const userSchema = new mongoose.Schema(
       ref: 'Subscription',
       default: null,
     },
+    isAgent: {
+      type: Boolean,
+      default: false,
+    },
+    agencyProfile: {
+      agencyName: { type: String, default: '' },
+      logoUrl: { type: String, default: '' },
+      phone: { type: String, default: '' },
+      email: { type: String, default: '' },
+      primaryColor: { type: String, default: '#3b82f6' },
+    },
   },
   {
     timestamps: true, // Adds createdAt and updatedAt

@@ -12,8 +12,13 @@ import {
   HiShieldCheck,
   HiClipboardList,
   HiPrinter,
+  HiShare,
+  HiEye,
+  HiEyeOff,
 } from 'react-icons/hi';
 import usePolicy from '../hooks/usePolicy';
+import useAuth from '../hooks/useAuth';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 const SectionTitle = ({ icon, title, color }) => (
@@ -28,6 +33,8 @@ const PolicyDetailPage = () => {
   const navigate = useNavigate();
   const { selectedPolicy, fetchPolicyById, loading, deletePolicy, toggleBookmark } =
     usePolicy();
+  const { user } = useAuth();
+  const [whiteLabelPreview, setWhiteLabelPreview] = useState(false);
 
   useEffect(() => {
     fetchPolicyById(id);
@@ -61,9 +68,38 @@ const PolicyDetailPage = () => {
       };
 
       // Styling parameters
+      const isBranded = whiteLabelPreview && user?.agencyProfile;
+      const agency = user?.agencyProfile || {};
+      const primaryHex = isBranded ? agency.primaryColor : '#3b82f6';
+      
+      const hexToRgb = (hex) => {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)] : [59, 130, 246];
+      };
+      const rgb = hexToRgb(primaryHex);
+
       const titleColor = [30, 41, 59]; // Slate 800
       const textColor = [51, 65, 85]; // Slate 700
       const lightGray = [241, 245, 249]; // Slate 100
+
+      // Accent Top Bar
+      doc.setFillColor(rgb[0], rgb[1], rgb[2]);
+      doc.rect(0, 0, pageWidth, 6, 'F');
+
+      // Branded Header block
+      if (isBranded) {
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(100, 116, 139);
+        doc.text(`Presented by: ${agency.agencyName || 'Insurance Agent'}`, margin, y);
+        if (agency.email || agency.phone) {
+          doc.text(`Contact: ${agency.email || ''} | ${agency.phone || ''}`, margin, y + 5);
+        }
+        doc.setDrawColor(226, 232, 240);
+        doc.setLineWidth(0.3);
+        doc.line(margin, y + 8, pageWidth - margin, y + 8);
+        y += 16;
+      }
 
       // Title Section
       doc.setFont('helvetica', 'bold');
@@ -78,7 +114,7 @@ const PolicyDetailPage = () => {
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(10);
       doc.setTextColor(100, 116, 139); // Slate 500
-      doc.text(`${summary?.policyType || 'Insurance Policy'} • Generated on ${new Date().toLocaleDateString()}`, margin, y);
+      doc.text(`${summary?.policyType || 'Insurance Policy'} • ${isBranded ? 'Branded Client Report' : `Generated on ${new Date().toLocaleDateString()}`}`, margin, y);
       y += 8;
 
       // Divider
@@ -328,6 +364,13 @@ const PolicyDetailPage = () => {
     }
   };
 
+  const handleShareLink = () => {
+    if (!selectedPolicy) return;
+    const shareUrl = `${window.location.origin}/shared/policy/${selectedPolicy._id}`;
+    navigator.clipboard.writeText(shareUrl);
+    toast.success('Branded public shared client link copied!');
+  };
+
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this policy?')) {
       const success = await deletePolicy(id);
@@ -373,31 +416,97 @@ const PolicyDetailPage = () => {
           </div>
         </div>
         <div className="flex items-center space-x-3">
+          {/* Share branded link (only if white-labeled) */}
+          {selectedPolicy.isWhiteLabeled && (
+            <button
+              onClick={handleShareLink}
+              className="smooth-btn p-2 rounded-lg bg-dark-100 text-slate-400 hover:text-green-400 transition-colors cursor-pointer border border-transparent"
+              style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
+              title="Copy Client Sharing Link"
+            >
+              <HiShare className="h-5 w-5" />
+            </button>
+          )}
+
+          {/* Toggle brand preview (only for agents) */}
+          {user?.isAgent && (
+            <button
+              onClick={() => setWhiteLabelPreview(!whiteLabelPreview)}
+              className={`smooth-btn p-2 rounded-lg transition-colors cursor-pointer border ${
+                whiteLabelPreview 
+                  ? 'bg-primary-600/10 text-primary-400 border-primary-500/30' 
+                  : 'bg-dark-100 text-slate-400 hover:text-primary-400 border-transparent'
+              }`}
+              style={!whiteLabelPreview ? { backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' } : {}}
+              title={whiteLabelPreview ? 'Disable Branding View' : 'Preview Client Branding'}
+            >
+              {whiteLabelPreview ? <HiEyeOff className="h-5 w-5" /> : <HiEye className="h-5 w-5" />}
+            </button>
+          )}
+
           <button
             onClick={handleDownloadPDF}
-            className="p-2 rounded-lg bg-dark-100 text-slate-400 hover:text-primary-400 transition-colors cursor-pointer"
+            className="smooth-btn p-2 rounded-lg bg-dark-100 text-slate-400 hover:text-primary-400 transition-colors cursor-pointer border border-transparent"
+            style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
             title="Download PDF Summary"
           >
             <HiPrinter className="h-5 w-5" />
           </button>
           <button
             onClick={() => toggleBookmark(id)}
-            className={`p-2 rounded-lg transition-colors cursor-pointer ${
+            className={`smooth-btn p-2 rounded-lg transition-colors cursor-pointer border border-transparent ${
               selectedPolicy.isBookmarked
                 ? 'bg-yellow-500/10 text-yellow-400'
                 : 'bg-dark-100 text-slate-400 hover:text-yellow-400'
             }`}
+            style={!selectedPolicy.isBookmarked ? { backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' } : {}}
           >
             <HiBookmark className="h-5 w-5" />
           </button>
           <button
             onClick={handleDelete}
-            className="p-2 rounded-lg bg-dark-100 text-slate-400 hover:text-red-400 transition-colors cursor-pointer"
+            className="smooth-btn p-2 rounded-lg bg-dark-100 text-slate-400 hover:text-red-400 transition-colors cursor-pointer border border-transparent"
+            style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
           >
             <HiTrash className="h-5 w-5" />
           </button>
         </div>
       </div>
+
+      {/* White Label Banner */}
+      {whiteLabelPreview && user?.agencyProfile && (
+        <div
+          className="rounded-2xl p-5 mb-6 border flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm"
+          style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
+        >
+          <div className="flex items-center space-x-3 text-center sm:text-left">
+            {user.agencyProfile.logoUrl ? (
+              <img
+                src={user.agencyProfile.logoUrl}
+                alt={user.agencyProfile.agencyName}
+                className="h-9 max-w-24 object-contain bg-white rounded p-1 border"
+                style={{ borderColor: 'var(--border)' }}
+              />
+            ) : (
+              <div
+                className="h-9 w-9 rounded-xl flex items-center justify-center font-bold text-white shadow-sm"
+                style={{ backgroundColor: user.agencyProfile.primaryColor || '#3b82f6' }}
+              >
+                {user.agencyProfile.agencyName?.[0] || 'A'}
+              </div>
+            )}
+            <div>
+              <p className="text-sm font-bold text-primary-theme">
+                {user.agencyProfile.agencyName || 'Your Agency Name'}
+              </p>
+              <p className="text-xs text-muted-theme mt-0.5">Exclusive Agent White-Label Preview Mode</p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-2 text-[10px] uppercase font-bold tracking-wider text-white px-3 py-1 rounded-full" style={{ backgroundColor: user.agencyProfile.primaryColor || '#3b82f6' }}>
+            Branded Link Sharing Active
+          </div>
+        </div>
+      )}
 
       {/* Overview */}
       {summary?.overview && (

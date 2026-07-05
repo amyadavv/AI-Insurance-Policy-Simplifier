@@ -18,6 +18,8 @@ import ClaimsAppealPage from './pages/ClaimsAppealPage';
 import AppealDetailPage from './pages/AppealDetailPage';
 import PolicyComparisonPage from './pages/PolicyComparisonPage';
 import ComparisonDetailPage from './pages/ComparisonDetailPage';
+import AgentSettingsPage from './pages/AgentSettingsPage';
+import SharedPolicyPage from './pages/SharedPolicyPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsOfServicePage from './pages/TermsOfServicePage';
 import NotFoundPage from './pages/NotFoundPage';
@@ -93,6 +95,17 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route
+                path="/agent/settings"
+                element={
+                  <ProtectedRoute>
+                    <AgentSettingsPage />
+                  </ProtectedRoute>
+                }
+              />
+              
+              {/* Public Client shared route */}
+              <Route path="/shared/policy/:id" element={<SharedPolicyPage />} />
 
               {/* Legal Pages */}
               <Route path="/privacy" element={<PrivacyPolicyPage />} />

@@ -39,6 +39,9 @@ const uploadPolicy = async (req, res) => {
       fileSize: size,
       status: 'extracting',
       tags: req.body.tags ? req.body.tags.split(',').map((t) => t.trim()) : [],
+      clientName: req.body.clientName || '',
+      clientEmail: req.body.clientEmail || '',
+      isWhiteLabeled: req.body.isWhiteLabeled === 'true' || req.body.isWhiteLabeled === true,
     });
 
     // Step 3: Extract text using OCR
@@ -335,6 +338,30 @@ const getDashboardStats = async (req, res) => {
   }
 };
 
+// @desc    Get a single shared policy details publicly
+// @route   GET /api/policy/shared/:id
+// @access  Public
+const getSharedPolicyById = async (req, res) => {
+  try {
+    // Populate the policy owner's agency profile details
+    const policy = await Policy.findById(req.params.id).populate(
+      'user',
+      'name email isAgent agencyProfile'
+    );
+
+    if (!policy) {
+      return res.status(404).json({ success: false, message: 'Policy not found' });
+    }
+
+    res.json({
+      success: true,
+      data: policy,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 module.exports = {
   uploadPolicy,
   getPolicies,
@@ -343,4 +370,5 @@ module.exports = {
   toggleBookmark,
   reSimplifyPolicy,
   getDashboardStats,
+  getSharedPolicyById,
 };

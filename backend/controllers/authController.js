@@ -1,6 +1,7 @@
 // backend/controllers/authController.js
 const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
+const { uploadToCloudinary } = require('../services/cloudinaryService');
 
 // @desc    Register a new user
 // @route   POST /api/auth/register
@@ -160,4 +161,64 @@ const updateUserProfile = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser, getUserProfile, updateUserProfile };
+// @desc    Update agency profile
+// @route   PUT /api/auth/agency
+// @access  Private
+const updateAgencyProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      res.status(404);
+      throw new Error('User not found');
+    }
+
+    // Initialize agencyProfile if null/undefined
+    if (!user.agencyProfile) {
+      user.agencyProfile = {};
+    }
+
+    // Process uploaded logo
+    if (req.file) {
+      console.log('📤 Uploading agency logo to Cloudinary...');
+      const cloudinaryResult = await uploadToCloudinary(
+        req.file.buffer,
+        'agency-logos',
+        'image'
+      );
+      user.agencyProfile.logoUrl = cloudinaryResult.url;
+    }
+
+    // Update fields
+    user.isAgent = true; // Mark as agent
+    user.agencyProfile.agencyName = req.body.agencyName || user.agencyProfile.agencyName;
+    user.agencyProfile.phone = req.body.phone || user.agencyProfile.phone;
+    user.agencyProfile.email = req.body.email || user.agencyProfile.email;
+    user.agencyProfile.primaryColor = req.body.primaryColor || user.agencyProfile.primaryColor;
+
+    const updatedUser = await user.save();
+
+    res.json({
+      success: true,
+      message: 'Agency profile updated successfully',
+      data: {
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        isAgent: updatedUser.isAgent,
+        agencyProfile: updatedUser.agencyProfile,
+      },
+    });
+  } catch (error) {
+    res.status(res.statusCode === 200 ? 500 : res.statusCode);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+module.exports = {
+  registerUser,
+  loginUser,
+  getUserProfile,
+  updateUserProfile,
+  updateAgencyProfile,
+};

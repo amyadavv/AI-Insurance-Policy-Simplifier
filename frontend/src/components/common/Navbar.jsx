@@ -168,6 +168,13 @@ const Navbar = () => {
                           <HiDocumentReport className="h-4 w-4" />
                           <span>Comparisons</span>
                         </Link>
+                        <Link
+                          to="/agent/settings"
+                          className="flex items-center space-x-2 px-4 py-2.5 text-xs text-muted-theme hover:text-primary-theme hover:bg-dark-100/10 rounded-lg"
+                        >
+                          <HiShieldCheck className="h-4 w-4" />
+                          <span>Agency Branding</span>
+                        </Link>
                       </div>
 
                       <div className="border-t pt-1" style={{ borderColor: 'var(--border)' }}>
@@ -250,6 +257,13 @@ const Navbar = () => {
                     {link.label}
                   </Link>
                 ))}
+                <Link
+                  to="/agent/settings"
+                  className="block px-3 py-2.5 rounded-lg text-sm transition-colors text-muted-theme hover:text-primary-theme"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Agency Branding
+                </Link>
                 <Link
                   to="/upload"
                   className="block px-3 py-2.5 text-primary-400 rounded-lg text-sm font-semibold"
