@@ -20,6 +20,8 @@ import PolicyComparisonPage from './pages/PolicyComparisonPage';
 import ComparisonDetailPage from './pages/ComparisonDetailPage';
 import AgentSettingsPage from './pages/AgentSettingsPage';
 import SharedPolicyPage from './pages/SharedPolicyPage';
+import HRDashboardPage from './pages/HRDashboardPage';
+import EmployeePortalPage from './pages/EmployeePortalPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsOfServicePage from './pages/TermsOfServicePage';
 import NotFoundPage from './pages/NotFoundPage';
@@ -100,6 +102,22 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <AgentSettingsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/hr/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <HRDashboardPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/employee/portal"
+                element={
+                  <ProtectedRoute>
+                    <EmployeePortalPage />
                   </ProtectedRoute>
                 }
               />

@@ -8,23 +8,25 @@ const useAuth = () => {
   const [user, setUser] = useRecoilState(authAtom);
   const [loading, setLoading] = useRecoilState(authLoadingAtom);
 
-  const register = async (name, email, password) => {
+  const register = async (name, email, password, role = 'user', organizationName = '') => {
     setLoading(true);
     try {
       const { data } = await axiosInstance.post('/auth/register', {
         name,
         email,
         password,
+        role,
+        organizationName,
       });
       if (data.success) {
         localStorage.setItem('userInfo', JSON.stringify(data.data));
         setUser(data.data);
         toast.success('Account created successfully!');
-        return true;
+        return data.data;
       }
     } catch (error) {
       toast.error(error.response?.data?.message || 'Registration failed');
-      return false;
+      return null;
     } finally {
       setLoading(false);
     }
@@ -41,11 +43,11 @@ const useAuth = () => {
         localStorage.setItem('userInfo', JSON.stringify(data.data));
         setUser(data.data);
         toast.success('Logged in successfully!');
-        return true;
+        return data.data;
       }
     } catch (error) {
       toast.error(error.response?.data?.message || 'Login failed');
-      return false;
+      return null;
     } finally {
       setLoading(false);
     }

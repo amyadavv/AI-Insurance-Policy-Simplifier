@@ -54,6 +54,7 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/policy', require('./routes/policyRoutes'));
 app.use('/api/appeal', require('./routes/appealRoutes'));
 app.use('/api/comparison', require('./routes/comparisonRoutes'));
+app.use('/api/hr', require('./routes/hrRoutes'));
 
 // Health check
 app.get('/api/health', (req, res) => {

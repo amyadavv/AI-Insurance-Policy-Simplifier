@@ -168,6 +168,24 @@ const Navbar = () => {
                           <HiDocumentReport className="h-4 w-4" />
                           <span>Comparisons</span>
                         </Link>
+                        {user.role === 'hr-admin' && (
+                          <Link
+                            to="/hr/dashboard"
+                            className="flex items-center space-x-2 px-4 py-2.5 text-xs text-primary-400 font-semibold hover:bg-primary-500/5 rounded-lg"
+                          >
+                            <HiShieldCheck className="h-4 w-4" />
+                            <span>HR Admin Portal</span>
+                          </Link>
+                        )}
+                        {user.role === 'employee' && (
+                          <Link
+                            to="/employee/portal"
+                            className="flex items-center space-x-2 px-4 py-2.5 text-xs text-primary-400 font-semibold hover:bg-primary-500/5 rounded-lg"
+                          >
+                            <HiShieldCheck className="h-4 w-4" />
+                            <span>Benefits Portal</span>
+                          </Link>
+                        )}
                         <Link
                           to="/agent/settings"
                           className="flex items-center space-x-2 px-4 py-2.5 text-xs text-muted-theme hover:text-primary-theme hover:bg-dark-100/10 rounded-lg"
@@ -257,6 +275,24 @@ const Navbar = () => {
                     {link.label}
                   </Link>
                 ))}
+                {user.role === 'hr-admin' && (
+                  <Link
+                    to="/hr/dashboard"
+                    className="block px-3 py-2.5 rounded-lg text-sm font-semibold text-primary-400 hover:text-primary-300"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    HR Admin Portal
+                  </Link>
+                )}
+                {user.role === 'employee' && (
+                  <Link
+                    to="/employee/portal"
+                    className="block px-3 py-2.5 rounded-lg text-sm font-semibold text-primary-400 hover:text-primary-300"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Benefits Portal
+                  </Link>
+                )}
                 <Link
                   to="/agent/settings"
                   className="block px-3 py-2.5 rounded-lg text-sm transition-colors text-muted-theme hover:text-primary-theme"

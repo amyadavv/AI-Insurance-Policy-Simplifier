@@ -117,6 +117,14 @@ const policySchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isOrganizationBenefit: {
+      type: Boolean,
+      default: false,
+    },
+    organizationName: {
+      type: String,
+      default: '',
+    },
   },
   {
     timestamps: true,

@@ -9,6 +9,8 @@ const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [role, setRole] = useState('user');
+  const [orgName, setOrgName] = useState('');
   const { register, loading } = useAuth();
   const navigate = useNavigate();
 
@@ -18,8 +20,14 @@ const RegisterPage = () => {
       alert('Passwords do not match');
       return;
     }
-    const success = await register(name, email, password);
-    if (success) navigate('/dashboard');
+    const userData = await register(name, email, password, role, orgName);
+    if (userData) {
+      if (role === 'hr-admin') {
+        navigate('/hr/dashboard');
+      } else {
+        navigate('/dashboard');
+      }
+    }
   };
 
   const fields = [
@@ -42,6 +50,55 @@ const RegisterPage = () => {
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Account Type Selector */}
+            <div>
+              <label className="block text-sm font-medium mb-2 text-label-theme">Account Type</label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setRole('user')}
+                  className={`py-2.5 rounded-xl border text-xs font-semibold cursor-pointer transition-colors ${
+                    role === 'user'
+                      ? 'bg-primary-600/10 text-primary-400 border-primary-500/30'
+                      : 'text-muted-theme border-transparent'
+                  }`}
+                  style={role !== 'user' ? { backgroundColor: 'var(--bg-input)', borderColor: 'var(--border-input)' } : {}}
+                >
+                  Personal / Individual
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRole('hr-admin')}
+                  className={`py-2.5 rounded-xl border text-xs font-semibold cursor-pointer transition-colors ${
+                    role === 'hr-admin'
+                      ? 'bg-primary-600/10 text-primary-400 border-primary-500/30'
+                      : 'text-muted-theme border-transparent'
+                  }`}
+                  style={role !== 'hr-admin' ? { backgroundColor: 'var(--bg-input)', borderColor: 'var(--border-input)' } : {}}
+                >
+                  Employer / HR Admin
+                </button>
+              </div>
+            </div>
+
+            {role === 'hr-admin' && (
+              <div>
+                <label className="block text-sm font-medium mb-2 text-label-theme">Organization Name</label>
+                <div className="relative">
+                  <HiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-subtle-theme" />
+                  <input
+                    type="text"
+                    value={orgName}
+                    onChange={(e) => setOrgName(e.target.value)}
+                    className="w-full border rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-1 focus:ring-primary-500 transition-colors text-primary-theme"
+                    style={{ backgroundColor: 'var(--bg-input)', borderColor: 'var(--border-input)' }}
+                    placeholder="e.g. Acme Corporation"
+                    required
+                  />
+                </div>
+              </div>
+            )}
+
             {fields.map(({ label, type, value, set, icon: Icon, placeholder, minLength }) => (
               <div key={label}>
                 <label className="block text-sm font-medium mb-2 text-label-theme">{label}</label>

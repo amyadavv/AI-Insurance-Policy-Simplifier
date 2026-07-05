@@ -12,8 +12,16 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const success = await login(email, password);
-    if (success) navigate('/dashboard');
+    const userData = await login(email, password);
+    if (userData) {
+      if (userData.role === 'hr-admin') {
+        navigate('/hr/dashboard');
+      } else if (userData.role === 'employee') {
+        navigate('/employee/portal');
+      } else {
+        navigate('/dashboard');
+      }
+    }
   };
 
   return (

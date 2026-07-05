@@ -1,6 +1,6 @@
 // frontend/src/pages/DashboardPage.jsx
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   HiDocumentText,
   HiCheckCircle,
@@ -30,6 +30,17 @@ const DashboardPage = () => {
   const { stats, fetchStats, fetchPolicies, policies, loading } = usePolicy();
   const [search, setSearch] = useState('');
   const [activeFilter, setActiveFilter] = useState('all');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      if (user.role === 'hr-admin') {
+        navigate('/hr/dashboard');
+      } else if (user.role === 'employee') {
+        navigate('/employee/portal');
+      }
+    }
+  }, [user]);
 
   useEffect(() => { fetchStats(); }, []);
 
@@ -40,6 +51,14 @@ const DashboardPage = () => {
     else if (activeFilter !== 'all') params.status = activeFilter;
     fetchPolicies(params);
   }, [search, activeFilter]);
+
+  if (user && (user.role === 'hr-admin' || user.role === 'employee')) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="animate-spin h-10 w-10 border-2 border-primary-500 border-t-transparent rounded-full" />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">

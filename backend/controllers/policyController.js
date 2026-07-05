@@ -42,6 +42,8 @@ const uploadPolicy = async (req, res) => {
       clientName: req.body.clientName || '',
       clientEmail: req.body.clientEmail || '',
       isWhiteLabeled: req.body.isWhiteLabeled === 'true' || req.body.isWhiteLabeled === true,
+      isOrganizationBenefit: req.user.role === 'hr-admin',
+      organizationName: req.user.role === 'hr-admin' ? (req.user.organizationName || 'Our Organization') : '',
     });
 
     // Step 3: Extract text using OCR

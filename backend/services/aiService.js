@@ -295,8 +295,61 @@ Return ONLY the JSON object, no additional text or markdown formatting outside o
   throw new Error(`Policy comparison failed: ${lastError.message}`);
 };
 
+/**
+ * Answer an employee benefits question based on the policy text
+ * @param {string} policyText - Raw text from the corporate group insurance policy
+ * @param {string} question - Employee question (e.g. "Does my plan cover dental checkups?")
+ * @returns {string} - Plain English answer response
+ */
+const answerBenefitQuestion = async (policyText, question) => {
+  const modelsToTry = ['gemini-3.5-flash', 'gemini-2.5-flash', 'gemini-2.0-flash-lite', 'gemini-2.0-flash'];
+  let lastError = null;
+
+  const prompt = `
+You are a friendly, professional corporate HR Benefits Assistant. Your job is to help employees understand their group insurance policy by answering their benefits questions in a clear, polite, and simple way.
+
+Base your answer ONLY on the provided insurance policy document text. Do not make assumptions or bring in outside knowledge.
+
+RULES:
+1. Be direct, clear, and extremely polite.
+2. If the treatment/treatment type/service is covered, list any associated copays, deductibles, limits, or pre-authorizations mentioned.
+3. If it is excluded, state clearly that it is not covered by the current plan.
+4. If the document does not contain enough information to answer, state: "I couldn't find details about this in our policy documents. Please consult our HR Benefits team directly for clarification."
+5. Format your response in clean markdown paragraphs (and bullet points if listing conditions). Keep it under 250 words.
+
+Employee Question: "${question}"
+
+--- INSURANCE POLICY TEXT START ---
+${policyText}
+--- INSURANCE POLICY TEXT END ---
+
+Return ONLY the plain English response. Do not include JSON wrappers or code block markers.
+`;
+
+  for (const modelName of modelsToTry) {
+    try {
+      console.log(`🤖 Sending question to Gemini AI (${modelName}) for benefits QA...`);
+      const model = genAI.getGenerativeModel({ model: modelName });
+
+      const result = await callGeminiWithRetry(model, prompt);
+      const response = await result.response;
+      const responseText = response.text().trim();
+
+      console.log(`✅ Benefits QA complete with model: ${modelName}`);
+      return responseText;
+    } catch (error) {
+      console.warn(`⚠️ Model ${modelName} failed on benefits QA: ${error.message}`);
+      lastError = error;
+    }
+  }
+
+  console.error('❌ AI Service Error: Benefits QA failed for all models');
+  throw new Error(`QA response generation failed: ${lastError.message}`);
+};
+
 module.exports = {
   simplifyPolicy,
   generateAppealLetter,
   comparePolicies,
+  answerBenefitQuestion,
 };

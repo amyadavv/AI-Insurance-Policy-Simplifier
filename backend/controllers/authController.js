@@ -8,7 +8,7 @@ const { uploadToCloudinary } = require('../services/cloudinaryService');
 // @access  Public
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role, organizationName } = req.body;
 
     // Validate input
     if (!name || !email || !password) {
@@ -28,6 +28,8 @@ const registerUser = async (req, res) => {
       name,
       email,
       password,
+      role: role || 'user',
+      organizationName: organizationName || '',
     });
 
     if (user) {
@@ -38,6 +40,8 @@ const registerUser = async (req, res) => {
           name: user.name,
           email: user.email,
           avatar: user.avatar,
+          role: user.role,
+          organizationName: user.organizationName,
           policiesCount: user.policiesCount,
           token: generateToken(user._id),
         },
@@ -84,6 +88,8 @@ const loginUser = async (req, res) => {
         name: user.name,
         email: user.email,
         avatar: user.avatar,
+        role: user.role,
+        organizationName: user.organizationName,
         policiesCount: user.policiesCount,
         token: generateToken(user._id),
       },
@@ -113,6 +119,8 @@ const getUserProfile = async (req, res) => {
         name: user.name,
         email: user.email,
         avatar: user.avatar,
+        role: user.role,
+        organizationName: user.organizationName,
         policiesCount: user.policiesCount,
         createdAt: user.createdAt,
       },

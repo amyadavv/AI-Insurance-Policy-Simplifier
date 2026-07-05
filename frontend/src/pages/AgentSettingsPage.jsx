@@ -60,9 +60,7 @@ const AgentSettingsPage = () => {
         formData.append('logo', logoFile);
       }
 
-      const { data } = await axiosInstance.put('/auth/agency', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      const { data } = await axiosInstance.put('/auth/agency', formData);
 
       if (data.success) {
         toast.success('Agency branding settings saved!');

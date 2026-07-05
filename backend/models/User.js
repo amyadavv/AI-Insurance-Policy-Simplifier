@@ -51,6 +51,20 @@ const userSchema = new mongoose.Schema(
       email: { type: String, default: '' },
       primaryColor: { type: String, default: '#3b82f6' },
     },
+    role: {
+      type: String,
+      enum: ['user', 'agent', 'hr-admin', 'employee'],
+      default: 'user',
+    },
+    organizationName: {
+      type: String,
+      default: '',
+    },
+    organizationAdmin: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      default: null,
+    },
   },
   {
     timestamps: true, // Adds createdAt and updatedAt

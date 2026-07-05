@@ -33,7 +33,14 @@ axiosInstance.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('userInfo');
-      window.location.href = '/login';
+      const isAuthPage = 
+        window.location.pathname.includes('/login') || 
+        window.location.pathname.includes('/register') || 
+        window.location.pathname === '/';
+        
+      if (!isAuthPage) {
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }
