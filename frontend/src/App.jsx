@@ -1,10 +1,77 @@
+// frontend/src/App.jsx
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
+import { Toaster } from 'react-hot-toast';
+
+import Navbar from './components/common/Navbar';
+import ProtectedRoute from './components/common/ProtectedRoute';
+
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import DashboardPage from './pages/DashboardPage';
+import UploadPage from './pages/UploadPage';
+import PolicyDetailPage from './pages/PolicyDetailPage';
+import NotFoundPage from './pages/NotFoundPage';
+
 function App() {
- 
   return (
-    <>
-      Hii
-    </>
-  )
+    <RecoilRoot>
+      <Router>
+        <div className="min-h-screen bg-dark-300 text-white font-sans">
+          <Navbar />
+          <main>
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+
+              {/* Protected Routes */}
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <DashboardPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/upload"
+                element={
+                  <ProtectedRoute>
+                    <UploadPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/policy/:id"
+                element={
+                  <ProtectedRoute>
+                    <PolicyDetailPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* 404 */}
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </main>
+        </div>
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: '#1e293b',
+              color: '#f1f5f9',
+              border: '1px solid #334155',
+            },
+          }}
+        />
+      </Router>
+    </RecoilRoot>
+  );
 }
 
-export default App
+export default App;
