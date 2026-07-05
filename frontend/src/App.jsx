@@ -4,6 +4,7 @@ import { RecoilRoot } from 'recoil';
 import { Toaster } from 'react-hot-toast';
 
 import Navbar from './components/common/Navbar';
+import Footer from './components/common/Footer';
 import ProtectedRoute from './components/common/ProtectedRoute';
 
 import HomePage from './pages/HomePage';
@@ -12,6 +13,8 @@ import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import UploadPage from './pages/UploadPage';
 import PolicyDetailPage from './pages/PolicyDetailPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import TermsOfServicePage from './pages/TermsOfServicePage';
 import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
@@ -53,10 +56,15 @@ function App() {
                 }
               />
 
+              {/* Legal Pages */}
+              <Route path="/privacy" element={<PrivacyPolicyPage />} />
+              <Route path="/terms" element={<TermsOfServicePage />} />
+
               {/* 404 */}
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </main>
+          <Footer />
         </div>
         <Toaster
           position="top-right"
