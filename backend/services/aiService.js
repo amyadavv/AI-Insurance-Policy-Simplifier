@@ -148,4 +148,155 @@ Return ONLY the JSON object, no additional text or markdown formatting.
   throw new Error(`AI simplification failed: ${lastError.message}`);
 };
 
-module.exports = { simplifyPolicy };
+/**
+ * Analyze a claim denial letter against an insurance policy and generate an appeal letter
+ * @param {string} policyText - Raw text extracted from the policy
+ * @param {string} denialText - Raw text extracted from the denial letter
+ * @returns {Object} - Appeal data containing denial reasoning, policy analysis, key arguments, and formal letter
+ */
+const generateAppealLetter = async (policyText, denialText) => {
+  const modelsToTry = ['gemini-3.5-flash', 'gemini-2.5-flash', 'gemini-2.0-flash-lite', 'gemini-2.0-flash'];
+  let lastError = null;
+
+  const prompt = `
+You are an expert insurance claims appeal specialist and consumer advocate. Your job is to help ordinary people write legally structured appeal letters when their claims are denied.
+
+Analyze the following insurance policy text and the claim denial letter. Cross-reference the denial reasoning with the policy terms, coverage clauses, and definitions. Find points where the policy covers the denied event or where the denial reasoning is weak, ambiguous, or incorrect.
+
+Provide your response in JSON format matching this exact structure:
+
+{
+  "denialReason": "A 2-3 sentence clear summary of why the insurance company states the claim was denied.",
+  "policyAnalysis": "A clear, plain-English analysis of the policy clauses. Explain how they relate to the denial, why the denial may be incorrect/incomplete, or what specific sections support the appeal.",
+  "keyArguments": [
+    "A concise, strong bullet point argument for the appeal (e.g. 'The policy covers emergency room visits with a $150 co-pay, but the insurer billed this as out-of-network outpatient service.')",
+    "Another strong key argument"
+  ],
+  "appealLetter": "The complete, formal, legally structured appeal letter in markdown format. Use formal business language. Use standard placeholders in brackets like [Your Name], [Policy Number], [Claim Number], [Date of Service], [Date of Denial Letter], [Insurer Address], etc., where appropriate. Reference specific policy sections and page numbers (if determinable) to construct a firm, professional, and convincing letter."
+}
+
+--- INSURANCE POLICY TEXT START ---
+${policyText}
+--- INSURANCE POLICY TEXT END ---
+
+--- CLAIM DENIAL LETTER TEXT START ---
+${denialText}
+--- CLAIM DENIAL LETTER TEXT END ---
+
+Return ONLY the JSON object, no additional text or markdown formatting outside of the JSON.
+`;
+
+  for (const modelName of modelsToTry) {
+    try {
+      console.log(`🤖 Sending texts to Gemini AI (${modelName}) for appeal letter generation...`);
+      const model = genAI.getGenerativeModel({ model: modelName });
+
+      const result = await callGeminiWithRetry(model, prompt);
+      const response = await result.response;
+      let responseText = response.text();
+
+      responseText = responseText
+        .replace(/```json\n?/g, '')
+        .replace(/```\n?/g, '')
+        .trim();
+
+      const appealData = JSON.parse(responseText);
+      console.log(`✅ AI appeal generation complete with model: ${modelName}`);
+      return appealData;
+    } catch (error) {
+      console.warn(`⚠️ Model ${modelName} failed on appeal: ${error.message}`);
+      lastError = error;
+    }
+  }
+
+  console.error('❌ AI Service Error: Appeal generation failed for all models');
+  if (lastError instanceof SyntaxError) {
+    throw new Error('AI returned an invalid response format for appeal. Please try again.');
+  }
+  throw new Error(`Appeal generation failed: ${lastError.message}`);
+};
+
+/**
+ * Compare two insurance policies side-by-side
+ * @param {string} policyAText - Raw text from policy/quote A
+ * @param {string} policyBText - Raw text from policy/quote B
+ * @returns {Object} - Structured comparison data
+ */
+const comparePolicies = async (policyAText, policyBText) => {
+  const modelsToTry = ['gemini-3.5-flash', 'gemini-2.5-flash', 'gemini-2.0-flash-lite', 'gemini-2.0-flash'];
+  let lastError = null;
+
+  const prompt = `
+You are an expert insurance comparison analyst. Your job is to generate a comprehensive, structured side-by-side comparison of two insurance policies or quotes.
+
+Analyze both policy/quote texts. Extract their key details (premium, deductible, waiting periods, limits, key covered features, exclusion risks, etc.) and create a comparison grid. Finally, provide a clear recommendation on which policy is a better choice and why.
+
+Provide your response in JSON format matching this exact structure:
+
+{
+  "policyA": {
+    "name": "Short name for Policy A (e.g. Star Health Optima)",
+    "type": "Type of insurance (e.g. Health Insurance)"
+  },
+  "policyB": {
+    "name": "Short name for Policy B (e.g. HDFC Ergo Optima Secure)",
+    "type": "Type of insurance"
+  },
+  "comparisonGrid": [
+    {
+      "feature": "Name of the feature or limit (e.g. Monthly Premium, Deductible, Co-pay, Inpatient Room Rent Limit, Pre-existing Disease Waiting Period, Maternity Coverage, etc.)",
+      "policyAValue": "Value or status in Policy A (specific and clear)",
+      "policyBValue": "Value or status in Policy B (specific and clear)",
+      "comparison": "Brief comparison analysis notes",
+      "winner": "policyA" or "policyB" or "tie"
+    }
+  ],
+  "winnerRecommendation": "A thorough, 2-3 paragraph recommendation explaining which policy offers better value, who each policy is best suited for, and warning about any hidden traps or gotchas in either policy."
+}
+
+--- POLICY A TEXT START ---
+${policyAText}
+--- POLICY A TEXT END ---
+
+--- POLICY B TEXT START ---
+${policyBText}
+--- POLICY B TEXT END ---
+
+Return ONLY the JSON object, no additional text or markdown formatting outside of the JSON.
+`;
+
+  for (const modelName of modelsToTry) {
+    try {
+      console.log(`🤖 Sending texts to Gemini AI (${modelName}) for side-by-side comparison...`);
+      const model = genAI.getGenerativeModel({ model: modelName });
+
+      const result = await callGeminiWithRetry(model, prompt);
+      const response = await result.response;
+      let responseText = response.text();
+
+      responseText = responseText
+        .replace(/```json\n?/g, '')
+        .replace(/```\n?/g, '')
+        .trim();
+
+      const comparisonData = JSON.parse(responseText);
+      console.log(`✅ AI comparison complete with model: ${modelName}`);
+      return comparisonData;
+    } catch (error) {
+      console.warn(`⚠️ Model ${modelName} failed on comparison: ${error.message}`);
+      lastError = error;
+    }
+  }
+
+  console.error('❌ AI Service Error: Policy comparison failed for all models');
+  if (lastError instanceof SyntaxError) {
+    throw new Error('AI returned an invalid response format for comparison. Please try again.');
+  }
+  throw new Error(`Policy comparison failed: ${lastError.message}`);
+};
+
+module.exports = {
+  simplifyPolicy,
+  generateAppealLetter,
+  comparePolicies,
+};

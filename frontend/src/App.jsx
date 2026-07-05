@@ -14,6 +14,10 @@ import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import UploadPage from './pages/UploadPage';
 import PolicyDetailPage from './pages/PolicyDetailPage';
+import ClaimsAppealPage from './pages/ClaimsAppealPage';
+import AppealDetailPage from './pages/AppealDetailPage';
+import PolicyComparisonPage from './pages/PolicyComparisonPage';
+import ComparisonDetailPage from './pages/ComparisonDetailPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsOfServicePage from './pages/TermsOfServicePage';
 import NotFoundPage from './pages/NotFoundPage';
@@ -54,6 +58,38 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <PolicyDetailPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/appeals"
+                element={
+                  <ProtectedRoute>
+                    <ClaimsAppealPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/appeals/:id"
+                element={
+                  <ProtectedRoute>
+                    <AppealDetailPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/compare"
+                element={
+                  <ProtectedRoute>
+                    <PolicyComparisonPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/compare/:id"
+                element={
+                  <ProtectedRoute>
+                    <ComparisonDetailPage />
                   </ProtectedRoute>
                 }
               />
