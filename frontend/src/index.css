@@ -44,20 +44,146 @@
   }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+/* ─────────────────────────────────────────────
+   SEMANTIC THEME VARIABLES
+   Default = Dark Theme
+───────────────────────────────────────────── */
+:root {
+  /* ── Dark Mode Palette ──────────────────────────────
+     Layered deep-navy surfaces — enough contrast to
+     separate page → section → card without feeling stark.
+  ─────────────────────────────────────────────────── */
+  --bg-page:        #0d1117;   /* Rich deep navy — not pure black */
+  --bg-nav:         rgba(13, 17, 23, 0.88);
+  --bg-card:        #161b27;   /* Card surface — one clear step up */
+  --bg-card-2:      #111520;   /* Alt section bg — between page & card */
+  --bg-input:       #1c2233;   /* Input fields — slightly lighter than card */
+  --bg-hover:       rgba(30, 41, 66, 0.7);
+
+  --text-primary:   #e6edf3;
+  --text-muted:     #8b949e;
+  --text-subtle:    #6e7681;
+  --text-label:     #c9d1d9;
+
+  --border:         #21262d;   /* Subtle border, visible but not harsh */
+  --border-input:   #30363d;
+
+  --badge-text:     #93c5fd;
+
+  color-scheme: dark;
 }
 
-::-webkit-scrollbar-track {
-  background: #1e293b;
+/* Light Theme overrides */
+[data-theme="light"] {
+  /* ── Light Mode Palette ─────────────────────────────
+     Warm-white cards on a cool blue-grey page — each
+     surface level is clearly readable and distinct.
+  ─────────────────────────────────────────────────── */
+  --bg-page:        #eef2f7;   /* Cool blue-grey page — clearly distinct from cards */
+  --bg-nav:         rgba(255, 255, 255, 0.90);
+  --bg-card:        #ffffff;   /* Pure white cards — pop cleanly off the page */
+  --bg-card-2:      #f4f7fb;   /* Alt section — between page and card */
+  --bg-input:       #f9fafb;
+  --bg-hover:       rgba(240, 245, 255, 0.9);
+
+  --text-primary:   #111827;
+  --text-muted:     #4b5563;
+  --text-subtle:    #9ca3af;
+  --text-label:     #374151;
+
+  --border:         #dde3ec;   /* Visible but soft */
+  --border-input:   #c8d0dc;
+
+  --badge-text:     #1d4ed8;
+
+  color-scheme: light;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #475569;
-  border-radius: 4px;
+/* ─────────────────────────────────────────────
+   SEMANTIC UTILITY CLASSES
+───────────────────────────────────────────── */
+.bg-page       { background-color: var(--bg-page); }
+.bg-nav        { background-color: var(--bg-nav); }
+.bg-card       { background-color: var(--bg-card); }
+.bg-card-2     { background-color: var(--bg-card-2); }
+.bg-input      { background-color: var(--bg-input); }
+.bg-hover      { background-color: var(--bg-hover); }
+
+.text-primary-theme  { color: var(--text-primary); }
+.text-muted-theme    { color: var(--text-muted); }
+.text-subtle-theme   { color: var(--text-subtle); }
+.text-label-theme    { color: var(--text-label); }
+
+.border-theme  { border-color: var(--border); }
+.border-input-theme { border-color: var(--border-input); }
+
+/* Apply theme background to root */
+body {
+  background-color: var(--bg-page);
+  color: var(--text-primary);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #64748b;
+/* ─────────────────────────────────────────────
+   THEME COLOR TRANSITIONS
+   Only color-related properties transition on
+   theme toggle — keeps transforms snappy.
+───────────────────────────────────────────── */
+*, *::before, *::after {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 0.25s;
+  transition-timing-function: ease;
 }
+
+/* ─────────────────────────────────────────────
+   SMOOTH INTERACTION UTILITIES
+   Add these classes to interactive elements.
+   They layer on top of the color transitions.
+───────────────────────────────────────────── */
+
+/* Card hover: subtle lift + shadow grow */
+.smooth-card {
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.35s ease,
+    border-color 0.25s ease,
+    background-color 0.25s ease !important;
+  will-change: transform;
+}
+.smooth-card:hover {
+  transform: translateY(-6px);
+}
+
+/* Button / link hover: gentle scale */
+.smooth-btn {
+  transition:
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    opacity 0.2s ease !important;
+  will-change: transform;
+}
+.smooth-btn:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+}
+.smooth-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+/* List item hover: slide-in feel */
+.smooth-row {
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease !important;
+  will-change: transform;
+}
+.smooth-row:hover {
+  transform: translateX(4px);
+}
+
+/* Custom scrollbar — adapts to theme */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-card-2); }
+::-webkit-scrollbar-thumb { background: var(--border-input); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-subtle); }
+

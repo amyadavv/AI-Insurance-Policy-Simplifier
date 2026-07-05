@@ -4,10 +4,10 @@ import { HiDocumentText, HiArrowLeft } from 'react-icons/hi';
 
 const Section = ({ title, children }) => (
   <div className="mb-10">
-    <h2 className="text-xl font-bold text-white mb-4 pb-2 border-b border-slate-800">
+    <h2 className="text-xl font-bold text-primary-theme mb-4 pb-2 border-b border-theme">
       {title}
     </h2>
-    <div className="text-slate-400 leading-relaxed space-y-3">{children}</div>
+    <div className="leading-relaxed space-y-3 text-muted-theme">{children}</div>
   </div>
 );
 
@@ -15,17 +15,17 @@ const TermsOfServicePage = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Header */}
-      <div className="relative py-16 px-4 overflow-hidden border-b border-slate-800">
-        <div className="absolute inset-0 bg-gradient-to-br from-accent-700/20 via-dark-300 to-dark-300" />
+      <div className="relative py-16 px-4 overflow-hidden border-b border-theme">
+        <div className="absolute inset-0 bg-gradient-to-br from-accent-700/10 via-transparent to-transparent" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-48 bg-accent-700/10 rounded-full blur-3xl" />
         <div className="relative max-w-3xl mx-auto text-center">
           <div className="inline-flex items-center space-x-2 bg-accent-700/10 border border-accent-700/20 rounded-full px-4 py-2 mb-6">
             <HiDocumentText className="text-accent-400 h-4 w-4" />
             <span className="text-accent-300 text-sm font-medium">Legal Agreement</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Terms of Service</h1>
-          <p className="text-slate-400 text-lg">
-            Last updated: <span className="text-white font-medium">July 2025</span>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-primary-theme">Terms of Service</h1>
+          <p className="text-lg text-muted-theme">
+            Last updated: <span className="text-primary-theme font-medium">July 2025</span>
           </p>
         </div>
       </div>
@@ -40,7 +40,10 @@ const TermsOfServicePage = () => {
           <span>Back to Home</span>
         </Link>
 
-        <div className="bg-dark-100 border border-slate-800 rounded-2xl p-8 md:p-10">
+        <div
+          className="rounded-2xl p-8 md:p-10 border"
+          style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
+        >
 
           <Section title="1. Agreement to Terms">
             <p>
@@ -137,8 +140,8 @@ const TermsOfServicePage = () => {
             <p>
               If you have any questions about these Terms, please contact:
             </p>
-            <div className="mt-3 p-4 bg-dark-200 rounded-xl border border-slate-800">
-              <p className="text-white font-medium">PolicySimplifier</p>
+            <div className="mt-3 p-4 rounded-xl border" style={{ backgroundColor: 'var(--bg-card-2)', borderColor: 'var(--border)' }}>
+              <p className="font-medium text-primary-theme">PolicySimplifier</p>
               <p>Email: <span className="text-primary-400">legal@policysimplifier.in</span></p>
             </div>
           </Section>

@@ -19,89 +19,47 @@ const RegisterPage = () => {
       return;
     }
     const success = await register(name, email, password);
-    if (success) {
-      navigate('/dashboard');
-    }
+    if (success) navigate('/dashboard');
   };
+
+  const fields = [
+    { label: 'Full Name', type: 'text', value: name, set: setName, icon: HiUser, placeholder: 'John Doe' },
+    { label: 'Email', type: 'email', value: email, set: setEmail, icon: HiMail, placeholder: 'you@example.com' },
+    { label: 'Password', type: 'password', value: password, set: setPassword, icon: HiLockClosed, placeholder: 'Min 6 characters', minLength: 6 },
+    { label: 'Confirm Password', type: 'password', value: confirmPassword, set: setConfirmPassword, icon: HiLockClosed, placeholder: 'Re-enter your password' },
+  ];
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-md">
-        <div className="bg-dark-100 border border-slate-800 rounded-2xl p-8 shadow-xl">
-          <h1 className="text-2xl font-bold text-center mb-2">Create Account</h1>
-          <p className="text-slate-400 text-center mb-8">
+        <div
+          className="rounded-2xl p-8 shadow-xl border"
+          style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
+        >
+          <h1 className="text-2xl font-bold text-center mb-2 text-primary-theme">Create Account</h1>
+          <p className="text-center mb-8 text-muted-theme">
             Start simplifying your insurance policies today
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
-                Full Name
-              </label>
-              <div className="relative">
-                <HiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-dark-200 border border-slate-700 rounded-xl pl-10 pr-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors"
-                  placeholder="John Doe"
-                  required
-                />
+            {fields.map(({ label, type, value, set, icon: Icon, placeholder, minLength }) => (
+              <div key={label}>
+                <label className="block text-sm font-medium mb-2 text-label-theme">{label}</label>
+                <div className="relative">
+                  <Icon className="absolute left-3 top-1/2 -translate-y-1/2 text-subtle-theme" />
+                  <input
+                    type={type}
+                    value={value}
+                    onChange={(e) => set(e.target.value)}
+                    className="w-full border rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-1 focus:ring-primary-500 transition-colors text-primary-theme"
+                    style={{ backgroundColor: 'var(--bg-input)', borderColor: 'var(--border-input)' }}
+                    placeholder={placeholder}
+                    minLength={minLength}
+                    required
+                  />
+                </div>
               </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
-                Email
-              </label>
-              <div className="relative">
-                <HiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-dark-200 border border-slate-700 rounded-xl pl-10 pr-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors"
-                  placeholder="you@example.com"
-                  required
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
-                Password
-              </label>
-              <div className="relative">
-                <HiLockClosed className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-dark-200 border border-slate-700 rounded-xl pl-10 pr-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors"
-                  placeholder="Min 6 characters"
-                  minLength={6}
-                  required
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
-                Confirm Password
-              </label>
-              <div className="relative">
-                <HiLockClosed className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-                <input
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full bg-dark-200 border border-slate-700 rounded-xl pl-10 pr-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors"
-                  placeholder="Re-enter your password"
-                  required
-                />
-              </div>
-            </div>
+            ))}
 
             <button
               type="submit"
@@ -112,11 +70,9 @@ const RegisterPage = () => {
             </button>
           </form>
 
-          <p className="text-slate-400 text-center mt-6 text-sm">
+          <p className="text-center mt-6 text-sm text-muted-theme">
             Already have an account?{' '}
-            <Link to="/login" className="text-primary-400 hover:text-primary-300">
-              Log In
-            </Link>
+            <Link to="/login" className="text-primary-400 hover:text-primary-300">Log In</Link>
           </p>
         </div>
       </div>

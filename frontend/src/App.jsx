@@ -2,6 +2,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import { Toaster } from 'react-hot-toast';
+import { ThemeProvider } from './context/ThemeContext';
 
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
@@ -19,9 +20,10 @@ import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
   return (
-    <RecoilRoot>
-      <Router>
-        <div className="min-h-screen bg-dark-300 text-white font-sans">
+    <ThemeProvider>
+      <RecoilRoot>
+        <Router>
+          <div className="min-h-screen bg-page text-primary-theme font-sans">
           <Navbar />
           <main>
             <Routes>
@@ -65,20 +67,21 @@ function App() {
             </Routes>
           </main>
           <Footer />
-        </div>
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 4000,
-            style: {
-              background: '#1e293b',
-              color: '#f1f5f9',
-              border: '1px solid #334155',
-            },
-          }}
-        />
-      </Router>
-    </RecoilRoot>
+          </div>
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 4000,
+              style: {
+                background: 'var(--bg-card)',
+                color: 'var(--text-primary)',
+                border: '1px solid var(--border)',
+              },
+            }}
+          />
+        </Router>
+      </RecoilRoot>
+    </ThemeProvider>
   );
 }
 
