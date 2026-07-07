@@ -12,15 +12,15 @@ export const ThemeProvider = ({ children }) => {
     // 1. Use saved user preference if it exists
     const saved = localStorage.getItem('theme');
     if (saved === 'dark' || saved === 'light') return saved;
-    // 2. Otherwise fall back to the OS system preference
-    return getSystemTheme();
+    // 2. Otherwise default to white theme (light)
+    return 'light';
   });
 
   // Apply data-theme attribute to <html> whenever theme changes
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === 'light') {
-      root.setAttribute('data-theme', 'light');
+    if (theme === 'dark') {
+      root.setAttribute('data-theme', 'dark');
     } else {
       root.removeAttribute('data-theme');
     }

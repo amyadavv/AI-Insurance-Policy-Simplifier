@@ -46,9 +46,35 @@
 
 /* ─────────────────────────────────────────────
    SEMANTIC THEME VARIABLES
-   Default = Dark Theme
+   Default = Light Theme
 ───────────────────────────────────────────── */
 :root {
+  /* ── Light Mode Palette ─────────────────────────────
+     Warm-white cards on a cool blue-grey page — each
+     surface level is clearly readable and distinct.
+  ─────────────────────────────────────────────────── */
+  --bg-page:        #eef2f7;   /* Cool blue-grey page — clearly distinct from cards */
+  --bg-nav:         rgba(255, 255, 255, 0.90);
+  --bg-card:        #ffffff;   /* Pure white cards — pop cleanly off the page */
+  --bg-card-2:      #f4f7fb;   /* Alt section bg — between page & card */
+  --bg-input:       #f9fafb;
+  --bg-hover:       rgba(240, 245, 255, 0.9);
+
+  --text-primary:   #111827;
+  --text-muted:     #4b5563;
+  --text-subtle:    #9ca3af;
+  --text-label:     #374151;
+
+  --border:         #dde3ec;   /* Visible but soft */
+  --border-input:   #c8d0dc;
+
+  --badge-text:     #1d4ed8;
+
+  color-scheme: light;
+}
+
+/* Dark Theme overrides */
+[data-theme="dark"] {
   /* ── Dark Mode Palette ──────────────────────────────
      Layered deep-navy surfaces — enough contrast to
      separate page → section → card without feeling stark.
@@ -71,32 +97,6 @@
   --badge-text:     #93c5fd;
 
   color-scheme: dark;
-}
-
-/* Light Theme overrides */
-[data-theme="light"] {
-  /* ── Light Mode Palette ─────────────────────────────
-     Warm-white cards on a cool blue-grey page — each
-     surface level is clearly readable and distinct.
-  ─────────────────────────────────────────────────── */
-  --bg-page:        #eef2f7;   /* Cool blue-grey page — clearly distinct from cards */
-  --bg-nav:         rgba(255, 255, 255, 0.90);
-  --bg-card:        #ffffff;   /* Pure white cards — pop cleanly off the page */
-  --bg-card-2:      #f4f7fb;   /* Alt section — between page and card */
-  --bg-input:       #f9fafb;
-  --bg-hover:       rgba(240, 245, 255, 0.9);
-
-  --text-primary:   #111827;
-  --text-muted:     #4b5563;
-  --text-subtle:    #9ca3af;
-  --text-label:     #374151;
-
-  --border:         #dde3ec;   /* Visible but soft */
-  --border-input:   #c8d0dc;
-
-  --badge-text:     #1d4ed8;
-
-  color-scheme: light;
 }
 
 /* ─────────────────────────────────────────────
