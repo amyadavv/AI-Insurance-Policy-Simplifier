@@ -76,7 +76,7 @@ const Navbar = () => {
               <HiShieldCheck className="h-6 w-6 text-white" />
             </div>
             <span className="text-xl font-bold bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent tracking-tight">
-              PolicySimplifier
+              AIPolicySimplifier
             </span>
           </Link>
 

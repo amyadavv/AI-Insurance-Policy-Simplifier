@@ -36,7 +36,7 @@ const SharedPolicyPage = () => {
 
     const doc = new jsPDF();
     const primaryColor = policy.user?.agencyProfile?.primaryColor || '#3b82f6';
-    const agencyName = policy.user?.agencyProfile?.agencyName || 'PolicySimplifier Agent';
+    const agencyName = policy.user?.agencyProfile?.agencyName || 'AIPolicySimplifier Agent';
 
     // Rgb converter
     const hexToRgb = (hex) => {
@@ -357,7 +357,7 @@ const SharedPolicyPage = () => {
           </div>
           
           <div className="pt-2 text-xs text-subtle-theme">
-            © {new Date().getFullYear()} {agencyName}. Securely processed by PolicySimplifier.
+            © {new Date().getFullYear()} {agencyName}. Securely processed by AIPolicySimplifier.
           </div>
         </div>
 

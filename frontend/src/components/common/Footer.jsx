@@ -18,7 +18,7 @@ const Footer = () => {
               <div className="bg-primary-600 p-1.5 rounded-lg">
                 <HiShieldCheck className="h-5 w-5 text-white" />
               </div>
-              <span className="font-bold text-lg text-primary-theme">PolicySimplifier</span>
+              <span className="font-bold text-lg text-primary-theme">AIPolicySimplifier</span>
             </Link>
             <p className="text-sm leading-relaxed text-muted-theme">
               AI-powered insurance policy simplification. Understand what you're covered for — in plain English.
@@ -55,7 +55,7 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="mailto:support@policysimplifier.in"
+                  href="mailto:support@aipolicysimplifier.in"
                   className="text-sm transition-colors text-muted-theme hover:text-primary-400"
                 >
                   Contact Support
@@ -71,7 +71,7 @@ const Footer = () => {
           style={{ borderColor: 'var(--border)' }}
         >
           <p className="text-sm text-subtle-theme">
-            © {currentYear} PolicySimplifier. All rights reserved.
+            © {currentYear} AIPolicySimplifier. All rights reserved.
           </p>
           <div className="flex items-center space-x-1 text-xs text-subtle-theme">
             <HiShieldCheck className="h-3.5 w-3.5 text-green-500" />

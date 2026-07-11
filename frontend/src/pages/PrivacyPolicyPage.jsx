@@ -47,7 +47,7 @@ const PrivacyPolicyPage = () => {
 
           <Section title="1. Introduction">
             <p>
-              Welcome to <strong className="text-white">PolicySimplifier</strong> ("we", "our", or "us"). We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our web application.
+              Welcome to <strong className="text-white">AIPolicySimplifier</strong> ("we", "our", or "us"). We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our web application.
             </p>
             <p>
               Please read this policy carefully. If you disagree with its terms, please discontinue use of the application.
@@ -146,8 +146,8 @@ const PrivacyPolicyPage = () => {
               If you have any questions about this Privacy Policy, please contact us at:
             </p>
             <div className="mt-3 p-4 rounded-xl border" style={{ backgroundColor: 'var(--bg-card-2)', borderColor: 'var(--border)' }}>
-              <p className="font-medium text-primary-theme">PolicySimplifier</p>
-              <p>Email: <span className="text-primary-400">privacy@policysimplifier.in</span></p>
+              <p className="font-medium text-primary-theme">AIPolicySimplifier</p>
+              <p>Email: <span className="text-primary-400">privacy@aipolicysimplifier.in</span></p>
             </div>
           </Section>
 
