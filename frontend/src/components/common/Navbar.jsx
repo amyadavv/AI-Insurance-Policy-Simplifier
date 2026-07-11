@@ -80,28 +80,6 @@ const Navbar = () => {
             </span>
           </Link>
 
-          {/* Center: Main Nav Links (Desktop) */}
-          {user && (
-            <div className="hidden md:flex items-center space-x-1 bg-card-2 border border-theme rounded-full p-1 mx-4">
-              {navLinks.map((link) => {
-                const isActive = location.pathname === link.to;
-                return (
-                  <Link
-                    key={link.to}
-                    to={link.to}
-                    className={`px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all ${
-                      isActive
-                        ? 'bg-primary-600 text-white shadow-sm'
-                        : 'text-muted-theme hover:text-primary-theme'
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
-            </div>
-          )}
-
           {/* Right: Actions (Desktop) */}
           <div className="hidden md:flex items-center space-x-4">
             {/* Theme Toggle */}
@@ -123,91 +101,12 @@ const Navbar = () => {
             </button>
 
             {user ? (
-              <>
-                {/* Upload CTA */}
-                <Link
-                  to="/upload"
-                  className="smooth-btn bg-primary-600 hover:bg-primary-500 text-white text-xs font-semibold px-4 py-2.5 rounded-xl hover:shadow-lg hover:shadow-primary-500/25 flex items-center space-x-1.5"
-                >
-                  <HiPlus className="h-4 w-4" />
-                  <span>Upload Policy</span>
-                </Link>
-
-                {/* Profile Dropdown */}
-                <div className="relative" ref={profileRef}>
-                  <button
-                    onClick={() => setIsProfileOpen(!isProfileOpen)}
-                    className="smooth-btn w-9 h-9 rounded-full bg-primary-600/10 hover:bg-primary-600/20 text-primary-400 border border-primary-500/25 flex items-center justify-center font-bold text-sm tracking-wider cursor-pointer"
-                  >
-                    {getInitials()}
-                  </button>
-
-                  {isProfileOpen && (
-                    <div
-                      className="absolute right-0 mt-3 w-56 rounded-2xl border shadow-xl p-2 animate-fade-in"
-                      style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
-                    >
-                      <div className="px-4 py-3 border-b" style={{ borderColor: 'var(--border)' }}>
-                        <p className="text-xs text-subtle-theme font-medium">Logged in as</p>
-                        <p className="text-sm font-bold text-primary-theme truncate">{user.name}</p>
-                        <p className="text-xs text-muted-theme truncate mt-0.5">{user.email}</p>
-                      </div>
-                      
-                      <div className="py-1">
-                        <Link
-                          to="/dashboard"
-                          className="flex items-center space-x-2 px-4 py-2.5 text-xs text-muted-theme hover:text-primary-theme hover:bg-dark-100/10 rounded-lg"
-                        >
-                          <HiUserCircle className="h-4 w-4" />
-                          <span>My Policies</span>
-                        </Link>
-                        <Link
-                          to="/compare"
-                          className="flex items-center space-x-2 px-4 py-2.5 text-xs text-muted-theme hover:text-primary-theme hover:bg-dark-100/10 rounded-lg"
-                        >
-                          <HiDocumentReport className="h-4 w-4" />
-                          <span>Comparisons</span>
-                        </Link>
-                        {user.role === 'hr-admin' && (
-                          <Link
-                            to="/hr/dashboard"
-                            className="flex items-center space-x-2 px-4 py-2.5 text-xs text-primary-400 font-semibold hover:bg-primary-500/5 rounded-lg"
-                          >
-                            <HiShieldCheck className="h-4 w-4" />
-                            <span>HR Admin Portal</span>
-                          </Link>
-                        )}
-                        {user.role === 'employee' && (
-                          <Link
-                            to="/employee/portal"
-                            className="flex items-center space-x-2 px-4 py-2.5 text-xs text-primary-400 font-semibold hover:bg-primary-500/5 rounded-lg"
-                          >
-                            <HiShieldCheck className="h-4 w-4" />
-                            <span>Benefits Portal</span>
-                          </Link>
-                        )}
-                        <Link
-                          to="/agent/settings"
-                          className="flex items-center space-x-2 px-4 py-2.5 text-xs text-muted-theme hover:text-primary-theme hover:bg-dark-100/10 rounded-lg"
-                        >
-                          <HiShieldCheck className="h-4 w-4" />
-                          <span>Agency Branding</span>
-                        </Link>
-                      </div>
-
-                      <div className="border-t pt-1" style={{ borderColor: 'var(--border)' }}>
-                        <button
-                          onClick={handleLogout}
-                          className="flex items-center space-x-2 w-full text-left px-4 py-2.5 text-xs text-red-500 hover:bg-red-500/5 hover:text-red-400 rounded-lg cursor-pointer font-semibold"
-                        >
-                          <HiLogout className="h-4 w-4" />
-                          <span>Sign Out</span>
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </>
+              <Link
+                to="/dashboard"
+                className="smooth-btn bg-primary-600 hover:bg-primary-500 text-white text-xs font-semibold px-4.5 py-2.5 rounded-xl hover:shadow-lg hover:shadow-primary-500/25"
+              >
+                Go to App
+              </Link>
             ) : (
               <div className="flex items-center space-x-3">
                 <Link
@@ -265,47 +164,12 @@ const Navbar = () => {
                   <p className="text-xs text-subtle-theme">Signed in as</p>
                   <p className="text-sm font-bold text-primary-theme truncate">{user.name}</p>
                 </div>
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.to}
-                    to={link.to}
-                    className="block px-3 py-2.5 rounded-lg text-sm transition-colors text-muted-theme hover:text-primary-theme"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-                {user.role === 'hr-admin' && (
-                  <Link
-                    to="/hr/dashboard"
-                    className="block px-3 py-2.5 rounded-lg text-sm font-semibold text-primary-400 hover:text-primary-300"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    HR Admin Portal
-                  </Link>
-                )}
-                {user.role === 'employee' && (
-                  <Link
-                    to="/employee/portal"
-                    className="block px-3 py-2.5 rounded-lg text-sm font-semibold text-primary-400 hover:text-primary-300"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Benefits Portal
-                  </Link>
-                )}
                 <Link
-                  to="/agent/settings"
-                  className="block px-3 py-2.5 rounded-lg text-sm transition-colors text-muted-theme hover:text-primary-theme"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Agency Branding
-                </Link>
-                <Link
-                  to="/upload"
+                  to="/dashboard"
                   className="block px-3 py-2.5 text-primary-400 rounded-lg text-sm font-semibold"
                   onClick={() => setIsOpen(false)}
                 >
-                  + Upload Policy
+                  Go to App
                 </Link>
                 <button
                   onClick={handleLogout}

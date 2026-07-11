@@ -4,9 +4,9 @@ import { RecoilRoot } from 'recoil';
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from './context/ThemeContext';
 
-import Navbar from './components/common/Navbar';
-import Footer from './components/common/Footer';
 import ProtectedRoute from './components/common/ProtectedRoute';
+import PublicLayout from './components/common/PublicLayout';
+import DashboardLayout from './components/common/DashboardLayout';
 
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
@@ -31,96 +31,12 @@ function App() {
     <ThemeProvider>
       <RecoilRoot>
         <Router>
-          <div className="min-h-screen bg-page text-primary-theme font-sans">
-          <Navbar />
-          <main>
-            <Routes>
-              {/* Public Routes */}
+          <Routes>
+            {/* Public Marketing & Legal Routes */}
+            <Route element={<PublicLayout />}>
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
-
-              {/* Protected Routes */}
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <DashboardPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/upload"
-                element={
-                  <ProtectedRoute>
-                    <UploadPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/policy/:id"
-                element={
-                  <ProtectedRoute>
-                    <PolicyDetailPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/appeals"
-                element={
-                  <ProtectedRoute>
-                    <ClaimsAppealPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/appeals/:id"
-                element={
-                  <ProtectedRoute>
-                    <AppealDetailPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/compare"
-                element={
-                  <ProtectedRoute>
-                    <PolicyComparisonPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/compare/:id"
-                element={
-                  <ProtectedRoute>
-                    <ComparisonDetailPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/agent/settings"
-                element={
-                  <ProtectedRoute>
-                    <AgentSettingsPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/hr/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <HRDashboardPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/employee/portal"
-                element={
-                  <ProtectedRoute>
-                    <EmployeePortalPage />
-                  </ProtectedRoute>
-                }
-              />
               
               {/* Public Client shared route */}
               <Route path="/shared/policy/:id" element={<SharedPolicyPage />} />
@@ -128,13 +44,31 @@ function App() {
               {/* Legal Pages */}
               <Route path="/privacy" element={<PrivacyPolicyPage />} />
               <Route path="/terms" element={<TermsOfServicePage />} />
-
+              
               {/* 404 */}
               <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-          </main>
-          <Footer />
-          </div>
+            </Route>
+
+            {/* Authenticated Dashboard Routes with Left Sidebar Layout */}
+            <Route
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/upload" element={<UploadPage />} />
+              <Route path="/policy/:id" element={<PolicyDetailPage />} />
+              <Route path="/appeals" element={<ClaimsAppealPage />} />
+              <Route path="/appeals/:id" element={<AppealDetailPage />} />
+              <Route path="/compare" element={<PolicyComparisonPage />} />
+              <Route path="/compare/:id" element={<ComparisonDetailPage />} />
+              <Route path="/agent/settings" element={<AgentSettingsPage />} />
+              <Route path="/hr/dashboard" element={<HRDashboardPage />} />
+              <Route path="/employee/portal" element={<EmployeePortalPage />} />
+            </Route>
+          </Routes>
           <Toaster
             position="top-right"
             toastOptions={{
