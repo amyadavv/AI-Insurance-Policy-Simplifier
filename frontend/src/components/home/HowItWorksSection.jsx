@@ -1,4 +1,5 @@
 // frontend/src/components/home/HowItWorksSection.jsx
+import ScrollReveal from '../common/ScrollReveal';
 
 const HowItWorksSection = () => {
   const steps = [
@@ -18,29 +19,37 @@ const HowItWorksSection = () => {
 
   return (
     <section className="py-20 px-4" style={{ backgroundColor: 'var(--bg-card-2)' }}>
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-14">
-          <h2 className="text-3xl font-extrabold text-primary-theme">How It Works</h2>
-          <p className="text-muted-theme mt-2 max-w-xl mx-auto text-sm">
-            Three simple steps to translate policy jargon into clear, actionable overviews.
-          </p>
-        </div>
+      <div className="max-w-7xl mx-auto">
+        <ScrollReveal animation="fade-up">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl font-extrabold text-primary-theme">How It Works</h2>
+            <p className="text-muted-theme mt-2 max-w-xl mx-auto text-base">
+              Three simple steps to translate policy jargon into clear, actionable overviews.
+            </p>
+          </div>
+        </ScrollReveal>
 
         <div className="grid md:grid-cols-3 gap-8">
           {steps.map((step, index) => (
-            <div
+            <ScrollReveal
               key={index}
-              className="smooth-card rounded-2xl p-8 border flex flex-col justify-between"
-              style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
+              animation="fade-up"
+              delay={index * 100}
+              className="flex"
             >
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-primary-500/15 text-primary-500 font-extrabold flex items-center justify-center mb-6 text-sm">
-                  {index + 1}
+              <div
+                className="smooth-card rounded-2xl p-8 border flex flex-col justify-between w-full"
+                style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
+              >
+                <div>
+                  <div className="w-12 h-12 rounded-xl bg-primary-500/10 text-primary-500 font-extrabold flex items-center justify-center mb-6 text-base">
+                    {index + 1}
+                  </div>
+                  <h3 className="text-lg font-bold mb-3 text-primary-theme">{step.title}</h3>
+                  <p className="text-sm leading-relaxed text-muted-theme">{step.description}</p>
                 </div>
-                <h3 className="text-lg font-bold mb-3 text-primary-theme">{step.title}</h3>
-                <p className="text-xs leading-relaxed text-muted-theme">{step.description}</p>
               </div>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </div>

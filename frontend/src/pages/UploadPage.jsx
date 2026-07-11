@@ -1,7 +1,7 @@
 // frontend/src/pages/UploadPage.jsx
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { HiCloudUpload, HiDocumentText, HiX } from 'react-icons/hi';
+import { HiCloudUpload, HiDocumentText, HiX, HiLockClosed } from 'react-icons/hi';
 import usePolicy from '../hooks/usePolicy';
 import useAuth from '../hooks/useAuth';
 
@@ -94,6 +94,15 @@ const UploadPage = () => {
             </>
           )}
           <input id="file-input" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,.tiff" onChange={handleFileChange} className="hidden" />
+        </div>
+
+        {/* Privacy & Trust Reassurance */}
+        <div className="flex items-start space-x-3 p-4 rounded-xl border bg-green-500/5 dark:bg-green-500/10 border-green-500/20 text-xs text-muted-theme mt-4">
+          <HiLockClosed className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+          <div>
+            <span className="font-semibold text-primary-theme block mb-0.5">Privacy-First Architecture</span>
+            Your uploaded policies are processed entirely in temporary memory and are handled with secure encryption.
+          </div>
         </div>
 
         {/* Tags */}

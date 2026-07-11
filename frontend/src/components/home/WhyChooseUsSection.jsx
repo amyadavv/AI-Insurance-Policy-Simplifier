@@ -1,5 +1,6 @@
 // frontend/src/components/home/WhyChooseUsSection.jsx
 import { HiCheckCircle, HiLightningBolt, HiLockClosed, HiEmojiHappy } from 'react-icons/hi';
+import ScrollReveal from '../common/ScrollReveal';
 
 const WhyChooseUsSection = () => {
   const reasons = [
@@ -26,38 +27,46 @@ const WhyChooseUsSection = () => {
   ];
 
   return (
-    <section className="py-20 px-4" style={{ backgroundColor: 'var(--bg-card-2)' }}>
-      <div className="max-w-6xl mx-auto">
+    <section className="py-20 px-4">
+      <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-12 gap-12 items-center">
           {/* Left Column: Heading & Info */}
-          <div className="lg:col-span-5 space-y-6">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-primary-theme leading-tight">
-              Why Choose <span className="bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent">AIPolicySimplifier</span>?
-            </h2>
-            <p className="text-muted-theme leading-relaxed text-base">
-              Insurance companies count on the complexity of their policy documents to protect their margins. We put the power back in your hands by translating legal jargon into direct, plain-English definitions.
-            </p>
-            <div className="pt-4">
-              <span className="inline-block px-4 py-2 bg-primary-500/10 text-primary-500 rounded-full font-semibold text-xs tracking-wider uppercase">
-                Empowering Policyholders & Agents
-              </span>
+          <ScrollReveal className="lg:col-span-5" animation="slide-right" delay={100}>
+            <div className="space-y-6">
+              <h2 className="text-3xl md:text-4xl font-extrabold text-primary-theme leading-tight">
+                Why Choose <span className="bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent">AIPolicySimplifier</span>?
+              </h2>
+              <p className="text-muted-theme leading-relaxed text-base">
+                Insurance companies count on the complexity of their policy documents to protect their margins. We put the power back in your hands by translating legal jargon into direct, plain-English definitions.
+              </p>
+              <div className="pt-4">
+                <span className="inline-block px-4 py-2 bg-primary-500/10 text-primary-500 rounded-full font-semibold text-xs tracking-wider uppercase">
+                  Empowering Policyholders & Agents
+                </span>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Right Column: Reasons List */}
           <div className="lg:col-span-7 grid sm:grid-cols-2 gap-6">
             {reasons.map((reason, index) => (
-              <div
+              <ScrollReveal
                 key={index}
-                className="smooth-card rounded-2xl p-6 border flex flex-col justify-start"
-                style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
+                animation="fade-up"
+                delay={200 + index * 100}
+                className="flex"
               >
-                <div className="w-10 h-10 rounded-lg bg-dark-100/5 dark:bg-white/5 flex items-center justify-center mb-4">
-                  {reason.icon}
+                <div
+                  className="smooth-card rounded-2xl p-6 border flex flex-col justify-start w-full"
+                  style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
+                >
+                  <div className="w-12 h-12 rounded-xl bg-dark-100/5 dark:bg-white/5 flex items-center justify-center mb-4">
+                    {reason.icon}
+                  </div>
+                  <h3 className="text-lg font-bold mb-2 text-primary-theme">{reason.title}</h3>
+                  <p className="text-sm leading-relaxed text-muted-theme">{reason.description}</p>
                 </div>
-                <h3 className="text-base font-bold mb-2 text-primary-theme">{reason.title}</h3>
-                <p className="text-xs leading-relaxed text-muted-theme">{reason.description}</p>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
