@@ -26,12 +26,12 @@ const comparisonSchema = new mongoose.Schema(
     },
     comparisonData: {
       policyA: {
-        name: String,
-        type: String,
+        name: { type: String },
+        type: { type: String },
       },
       policyB: {
-        name: String,
-        type: String,
+        name: { type: String },
+        type: { type: String },
       },
       comparisonGrid: [
         {
