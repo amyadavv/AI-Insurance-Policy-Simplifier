@@ -181,12 +181,7 @@ const updateAgencyProfile = async (req, res) => {
       throw new Error('User not found');
     }
 
-    // Initialize agencyProfile if null/undefined
-    if (!user.agencyProfile) {
-      user.agencyProfile = {};
-    }
-
-    // Process uploaded logo
+    let logoUrl = '';
     if (req.file) {
       console.log('📤 Uploading agency logo to Cloudinary...');
       const cloudinaryResult = await uploadToCloudinary(
@@ -194,17 +189,27 @@ const updateAgencyProfile = async (req, res) => {
         'agency-logos',
         'image'
       );
-      user.agencyProfile.logoUrl = cloudinaryResult.url;
+      logoUrl = cloudinaryResult.url;
     }
 
-    // Update fields
-    user.isAgent = true; // Mark as agent
-    user.agencyProfile.agencyName = req.body.agencyName || user.agencyProfile.agencyName;
-    user.agencyProfile.phone = req.body.phone || user.agencyProfile.phone;
-    user.agencyProfile.email = req.body.email || user.agencyProfile.email;
-    user.agencyProfile.primaryColor = req.body.primaryColor || user.agencyProfile.primaryColor;
+    // Prepare update object
+    const updateData = {
+      isAgent: true,
+      'agencyProfile.agencyName': req.body.agencyName !== undefined ? req.body.agencyName : (user.agencyProfile ? user.agencyProfile.agencyName : ''),
+      'agencyProfile.phone': req.body.phone !== undefined ? req.body.phone : (user.agencyProfile ? user.agencyProfile.phone : ''),
+      'agencyProfile.email': req.body.email !== undefined ? req.body.email : (user.agencyProfile ? user.agencyProfile.email : ''),
+      'agencyProfile.primaryColor': req.body.primaryColor !== undefined ? req.body.primaryColor : (user.agencyProfile ? user.agencyProfile.primaryColor : '#3b82f6'),
+    };
 
-    const updatedUser = await user.save();
+    if (logoUrl) {
+      updateData['agencyProfile.logoUrl'] = logoUrl;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      { $set: updateData },
+      { new: true, runValidators: true }
+    );
 
     res.json({
       success: true,
