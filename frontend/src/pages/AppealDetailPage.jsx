@@ -191,7 +191,12 @@ const AppealDetailPage = () => {
 
         {/* Letter body */}
         <div className="p-8 font-mono text-sm leading-relaxed text-muted-theme whitespace-pre-wrap select-text">
-          {appeal.appealLetter}
+          {appeal.appealLetter
+            ? appeal.appealLetter
+                .replace(/^#+\s+/gm, '') // Remove heading hashes (#)
+                .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold asterisks (**word**)
+                .replace(/\*(.*?)\*/g, '$1') // Remove italic asterisks (*word*)
+            : ''}
         </div>
       </div>
     </div>

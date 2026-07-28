@@ -172,7 +172,7 @@ Provide your response in JSON format matching this exact structure:
     "A concise, strong bullet point argument for the appeal (e.g. 'The policy covers emergency room visits with a $150 co-pay, but the insurer billed this as out-of-network outpatient service.')",
     "Another strong key argument"
   ],
-  "appealLetter": "The complete, formal, legally structured appeal letter in markdown format. Use formal business language. Use standard placeholders in brackets like [Your Name], [Policy Number], [Claim Number], [Date of Service], [Date of Denial Letter], [Insurer Address], etc., where appropriate. Reference specific policy sections and page numbers (if determinable) to construct a firm, professional, and convincing letter."
+  "appealLetter": "The complete, formal, legally structured appeal letter in clean, plain text format. DO NOT use markdown symbols, stars (**), hashes (#), or markdown bolding. Use standard clean spacing, formal paragraph breaks, and standard bullet points (-) where appropriate. Use standard placeholders in brackets like [Your Name], [Policy Number], [Claim Number], [Date of Service], [Date of Denial Letter], [Insurer Address], etc., where appropriate. Reference specific policy sections to construct a firm, professional, and convincing formal letter."
 }
 
 --- INSURANCE POLICY TEXT START ---
