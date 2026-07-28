@@ -27,6 +27,8 @@ const fileFilter = (req, file, cb) => {
     );
   }
 };
+// cb (null, true) ===> no error, proceed with upload
+// cb (error, false) ===> error, reject upload
 
 const upload = multer({
   storage,

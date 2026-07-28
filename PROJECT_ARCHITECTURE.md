@@ -861,6 +861,8 @@ graph LR
 | **HR Admin** | `hr-admin` | Upload corporate benefit policies, manage employee accounts, view Q&A audit logs |
 | **Employee** | `employee` | View corporate policies assigned by their HR admin, ask AI-powered benefits questions |
 
+> 📖 **Detailed Architecture Document:** For a complete deep-dive into multi-tenant data isolation, authorization guards, and security layer design, see [RBAC.md](file:///e:/Study/Project/AI-Insurance-Policy-Simplifier/RBAC.md).
+
 ---
 
 ## 8. Environment Variables
@@ -896,7 +898,7 @@ erDiagram
     USER ||--o{ COMPARISON : "creates"
     USER ||--o{ QUESTION_LOG : "asks"
     USER ||--o| SUBSCRIPTION : "has active"
-    USER ||--o{ USER : "manages (HR Admin → Employees)"
+    USER ||--o{ USER : "manages HR Admin to Employees"
 
     POLICY ||--o{ QUESTION_LOG : "referenced in"
     PLAN ||--o{ SUBSCRIPTION : "defines"
@@ -985,6 +987,36 @@ erDiagram
         string gatewayPaymentId
     }
 ```
+
+---
+
+### 📦 Collection Details — What Each Entity Stores
+
+| Collection | Purpose | Key Fields |
+| :--- | :--- | :--- |
+| **`USER`** | Stores user auth, role permissions, and organization mapping. | `role` (`'user'`, `'agent'`, `'hr-admin'`, `'employee'`), `agencyProfile` (whitelabeling), `organizationAdmin` (HR Manager reference). |
+| **`POLICY`** | Primary policy document model. | `fileUrl` (Cloudinary URL), `extractedText` (OCR output), `simplifiedSummary` (AI summary), `isOrganizationBenefit`. |
+| **`APPEAL`** | Stores claim denial appeal letters. | `denialReason`, `policyAnalysis`, `keyArguments`, `appealLetter` (generated letter text). |
+| **`COMPARISON`** | Stores side-by-side policy comparisons. | `policyAFileName`, `policyBFileName`, `comparisonData` (coverage diff). |
+| **`QUESTION_LOG`** | Corporate Q&A log for employee benefit queries. | `user` (Employee FK), `policy` (Policy FK), `question`, `answer`. |
+| **`PLAN`** | Dynamic subscription tier catalog. | `name` (`'free'`, `'premium'`, `'agent_pro'`), `uploadLimit`, `hasChatbot`, `hasWhiteLabel`. |
+| **`SUBSCRIPTION`** | Active/historical subscription contract state. | `user` (User FK), `plan` (Plan FK), `status` (`'active'`, `'canceled'`), `endDate`. |
+| **`TRANSACTION`** | Immutable payment ledger. | `amount`, `gateway` (`'stripe'` or `'razorpay'`), `gatewayPaymentId` (Stripe `ch_xxx` or Razorpay `pay_xxx`). |
+
+---
+
+### 🔗 Entity Relationships Explained
+
+1. **`USER ||--o{ POLICY` ("uploads")**: A single user can upload **0 to many** insurance policy documents.
+2. **`USER ||--o{ APPEAL` ("creates")**: A user can create **0 to many** claim denial appeal letters.
+3. **`USER ||--o{ COMPARISON` ("creates")**: A user can generate **0 to many** side-by-side policy comparisons.
+4. **`USER ||--o{ QUESTION_LOG` ("asks")**: Employees can ask **0 to many** AI questions about corporate policies.
+5. **`POLICY ||--o{ QUESTION_LOG` ("referenced in")**: A policy document can be referenced across **many** employee Q&A logs.
+6. **`USER ||--o| SUBSCRIPTION` ("has active")**: A user has at most **one** active subscription at any given time.
+7. **`USER ||--o{ USER` ("manages HR Admin to Employees")**: Self-referencing relationship where an **HR Admin** manages **many Employee** accounts via `organizationAdmin`.
+8. **`PLAN ||--o{ SUBSCRIPTION` ("defines")**: One Plan tier definition applies to **many** user subscriptions.
+9. **`SUBSCRIPTION ||--o{ TRANSACTION` ("funded by")**: A subscription contract is funded by **1 or many** recurring transaction payments over time.
+10. **`USER ||--o{ TRANSACTION` ("pays")**: A user can make **many** payment transactions over their lifespan.
 
 ---
 

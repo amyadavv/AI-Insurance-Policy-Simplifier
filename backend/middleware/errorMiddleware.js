@@ -37,4 +37,6 @@ const errorHandler = (err, req, res, next) => {
   });
 };
 
+// stack: the detailed code line error trace (only visible in development mode; hidden in production for security).
+
 module.exports = { notFound, errorHandler };
