@@ -101,3 +101,4 @@ Serves as an immutable financial ledger, storing details of every charge event f
 *   `amount`: The charged amount (decimals supported).
 *   `gateway`: Payment provider used (`'stripe'` or `'razorpay'`).
 *   `gatewayPaymentId`: Unique transaction ID provided by Stripe (`ch_xxx` / `pi_xxx`) or Razorpay (`pay_xxx`).
+
